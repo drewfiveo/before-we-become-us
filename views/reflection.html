@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>Reflection | Before We Become Us</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #f7f5f1;
+        color: #252525;
+        line-height: 1.6;
+    }
+
+    a {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .page {
+        min-height: 100vh;
+    }
+
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 24px 7%;
+        border-bottom: 1px solid #dedbd5;
+    }
+
+    .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 600;
+    }
+
+    .brand-mark {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        border: 1px solid #252525;
+        font-size: 13px;
+        letter-spacing: 1px;
+    }
+
+    .back-link {
+        font-size: 14px;
+        text-decoration: underline;
+        text-underline-offset: 4px;
+    }
+
+    main {
+        width: min(850px, 86%);
+        margin: 0 auto;
+        padding: 90px 0 110px;
+    }
+
+    .eyebrow {
+        margin-bottom: 18px;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    h1 {
+        max-width: 760px;
+        margin-bottom: 22px;
+        font-size: clamp(42px, 7vw, 72px);
+        line-height: 1;
+        font-weight: 500;
+        letter-spacing: -2px;
+    }
+
+    .intro {
+        max-width: 680px;
+        margin-bottom: 55px;
+        font-size: 20px;
+        color: #5d5a55;
+    }
+
+    .reflection-box {
+        padding: 40px;
+        border: 1px solid #d8d4cc;
+        background: #ffffff;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 14px;
+        font-size: 17px;
+        font-weight: 600;
+    }
+
+    textarea {
+        width: 100%;
+        min-height: 280px;
+        padding: 18px;
+        border: 1px solid #cfcac1;
+        background: #faf9f7;
+        color: #252525;
+        font-family: inherit;
+        font-size: 16px;
+        line-height: 1.6;
+        resize: vertical;
+        outline: none;
+    }
+
+    textarea:focus {
+        border-color: #252525;
+    }
+
+    .note {
+        margin-top: 12px;
+        font-size: 13px;
+        color: #77736d;
+    }
+
+    .actions {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        margin-top: 24px;
+    }
+
+    .button {
+        display: inline-block;
+        padding: 13px 22px;
+        border: 1px solid #252525;
+        background: #252525;
+        color: #ffffff;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .secondary-button {
+        padding: 13px 22px;
+        border: 1px solid #cfcac1;
+        background: transparent;
+        color: #252525;
+        font-size: 14px;
+    }
+
+    footer {
+        padding: 30px 7%;
+        border-top: 1px solid #dedbd5;
+        font-size: 13px;
+        color: #77736d;
+    }
+
+    @media (max-width: 700px) {
+        header {
+            padding: 20px 6%;
+        }
+
+        main {
+            width: 88%;
+            padding: 65px 0 75px;
+        }
+
+        .reflection-box {
+            padding: 25px;
+        }
+
+        .actions {
+            flex-direction: column;
+            align-items: stretch;
+        }
+    }
+</style>
+
+
+</head>
+
+<body>
+    <div class="page">
+
+
+    <header>
+        <a href="/" class="brand">
+            <span class="brand-mark">BW</span>
+            <span>Before We Become Us</span>
+        </a>
+
+        <a href="/thoughts-and-feelings" class="back-link">
+            Back to thoughts & feelings
+        </a>
+    </header>
+
+    <main>
+
+        <p class="eyebrow">Reflection</p>
+
+        <h1>Start with what is present.</h1>
+
+        <p class="intro">
+            You do not need to have everything figured out.
+            Give yourself a moment to put into words what is
+            happening within you right now.
+        </p>
+
+        <section class="reflection-box">
+
+            <label for="reflection">
+                What is on your mind right now?
+            </label>
+
+            <textarea
+                id="reflection"
+                name="reflection"
+                placeholder="Write whatever feels important to you..."
+            ></textarea>
+
+          <p class="note" id="saveMessage">
+    Your reflection can be saved and returned to later.
+</p>
+
+            <div class="actions">
+               <button type="button" class="button" id="saveReflection">
+    Save reflection
+</button>
+
+                <a
+                    href="/thoughts-and-feelings"
+                    class="secondary-button"
+                >
+                    Go back
+                </a>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer>
+        Before We Become Us — A space for growth, guidance and
+        healthier connections.
+    </footer>
+
+</div>
+
+<script>
+    const saveButton = document.getElementById("saveReflection");
+    const reflectionBox = document.getElementById("reflection");
+
+    saveButton.addEventListener("click", async () => {
+        const reflection = reflectionBox.value.trim();
+
+        if (!reflection) {
+            alert("Please write something before saving.");
+            return;
+        }
+
+        try {
+            const response = await fetch("/api/reflections", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    reflection: reflection
+                })
+            });
+
+            const data = await response.json();
+
+           const saveMessage = document.getElementById("saveMessage");
+
+if (response.ok) {
+    saveMessage.textContent = "Reflection saved successfully.";
+    reflectionBox.value = "";
+} else {
+    saveMessage.textContent = data.message;
+}
+
+        } catch (error) {
+            console.error(error);
+            alert("Something went wrong while saving your reflection.");
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>My Reflections | Before We Become Us</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #f7f5f1;
+        color: #252525;
+        line-height: 1.6;
+    }
+
+    a {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 24px 7%;
+        border-bottom: 1px solid #dedbd5;
+    }
+
+    .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 600;
+    }
+
+    .brand-mark {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        border: 1px solid #252525;
+        font-size: 13px;
+        letter-spacing: 1px;
+    }
+
+    .back-link {
+        font-size: 14px;
+        text-decoration: underline;
+        text-underline-offset: 4px;
+    }
+
+    main {
+        width: min(950px, 86%);
+        margin: 0 auto;
+        padding: 80px 0 110px;
+    }
+
+    .eyebrow {
+        margin-bottom: 18px;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    h1 {
+        margin-bottom: 18px;
+        font-size: clamp(42px, 7vw, 70px);
+        line-height: 1;
+        font-weight: 500;
+        letter-spacing: -2px;
+    }
+
+    .intro {
+        max-width: 680px;
+        margin-bottom: 55px;
+        font-size: 19px;
+        color: #5d5a55;
+    }
+
+    .reflection-list {
+        display: grid;
+        gap: 18px;
+    }
+
+    .reflection-card {
+        padding: 30px;
+        border: 1px solid #d8d4cc;
+        background: #ffffff;
+    }
+
+    .reflection-date {
+        margin-bottom: 16px;
+        font-size: 13px;
+        color: #77736d;
+    }
+
+    .reflection-text {
+        font-size: 17px;
+        white-space: pre-wrap;
+    }
+
+    .empty-state {
+        padding: 45px;
+        border: 1px solid #d8d4cc;
+        background: #ffffff;
+        color: #5d5a55;
+    }
+
+    .empty-state h2 {
+        margin-bottom: 12px;
+        color: #252525;
+        font-size: 26px;
+        font-weight: 500;
+    }
+
+    .button {
+        display: inline-block;
+        margin-top: 24px;
+        padding: 13px 20px;
+        border: 1px solid #252525;
+        background: #252525;
+        color: #ffffff;
+        font-size: 14px;
+    }
+
+    footer {
+        padding: 30px 7%;
+        border-top: 1px solid #dedbd5;
+        font-size: 13px;
+        color: #77736d;
+    }
+
+    @media (max-width: 700px) {
+        header {
+            padding: 20px 6%;
+        }
+
+        main {
+            width: 88%;
+            padding: 65px 0 75px;
+        }
+
+        .reflection-card,
+        .empty-state {
+            padding: 25px;
+        }
+    }
+</style>
+
+
+</head>
+
+<body>
+
+
+<header>
+
+    <a href="/" class="brand">
+        <span class="brand-mark">BW</span>
+        <span>Before We Become Us</span>
+    </a>
+
+    <a href="/reflection" class="back-link">
+        Write a reflection
+    </a>
+
+</header>
+
+<main>
+
+    <p class="eyebrow">My Reflections</p>
+
+    <h1>What you have taken time to notice.</h1>
+
+    <p class="intro">
+        Your reflections give you a place to return to your thoughts,
+        experiences and questions over time.
+    </p>
+
+    <section id="reflectionList" class="reflection-list">
+
+        <div class="empty-state">
+            <h2>Loading your reflections...</h2>
+            <p>
+                Please wait while we retrieve your saved reflections.
+            </p>
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+    Before We Become Us — A space for growth, guidance and
+    healthier connections.
+</footer>
+
+<script>
+
+    async function loadReflections() {
+
+        const reflectionList =
+            document.getElementById("reflectionList");
+
+        try {
+
+            const response =
+                await fetch("/api/reflections");
+
+            const data =
+                await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message);
+            }
+
+            if (data.reflections.length === 0) {
+
+                reflectionList.innerHTML = `
+                    <div class="empty-state">
+                        <h2>No reflections yet.</h2>
+
+                        <p>
+                            When you are ready, take a moment to
+                            write your first reflection.
+                        </p>
+
+                        <a
+                            href="/reflection"
+                            class="button"
+                        >
+                            Begin a reflection
+                        </a>
+                    </div>
+                `;
+
+                return;
+            }
+
+            reflectionList.innerHTML =
+                data.reflections.map(item => {
+
+                    const date =
+                        new Date(item.createdAt)
+                            .toLocaleString();
+
+                    return `
+                        <article class="reflection-card">
+
+                            <p class="reflection-date">
+                                ${date}
+                            </p>
+
+                            <p class="reflection-text">
+                                ${item.reflection}
+                            </p>
+
+                        </article>
+                    `;
+
+                }).join("");
+
+        } catch (error) {
+
+            console.error(error);
+
+            reflectionList.innerHTML = `
+                <div class="empty-state">
+                    <h2>We could not load your reflections.</h2>
+
+                    <p>
+                        Please try again in a moment.
+                    </p>
+                </div>
+            `;
+        }
+    }
+
+    loadReflections();
+
+</script>
+
+
+</body>
+</html>

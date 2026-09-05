@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Account | Before We Become Us</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+<main class="login-page">
+
+    <!-- Living background -->
+    <div class="login-atmosphere" aria-hidden="true">
+
+        <div class="login-orbit login-orbit-one"></div>
+        <div class="login-orbit login-orbit-two"></div>
+
+        <div class="login-lamp">
+            <div class="lamp-glow lamp-glow-large"></div>
+            <div class="lamp-glow lamp-glow-medium"></div>
+
+            <div class="lamp-shade">
+                <span></span>
+            </div>
+
+            <div class="lamp-stem"></div>
+
+            <div class="lamp-base"></div>
+        </div>
+
+        <div class="login-dust login-dust-one"></div>
+        <div class="login-dust login-dust-two"></div>
+        <div class="login-dust login-dust-three"></div>
+        <div class="login-dust login-dust-four"></div>
+
+    </div>
+
+
+    <div class="login-container">
+
+        <section class="login-card">
+
+            <div class="login-brand">
+
+                <a href="/" class="brand">
+                    <span class="brand-mark">BWBU</span>
+
+                    <span class="brand-name">
+                        Before We Become Us
+                    </span>
+                </a>
+
+                <a href="/login" class="login-back">
+                    Sign in
+                </a>
+
+            </div>
+
+
+            <div class="login-heading">
+
+                <span class="section-label">
+                    Begin here
+                </span>
+
+                <h1>
+                    Make a little<br>
+                    space for yourself.
+                </h1>
+
+                <p>
+                    Create your private space for reflections,
+                    thoughts and moments worth remembering.
+                </p>
+
+            </div>
+
+
+            <form class="login-form" id="registerForm">
+
+                <div class="login-field">
+
+                    <label for="name">
+                        Your name
+                    </label>
+
+                    <div class="login-input-wrap">
+
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            placeholder="Your name"
+                            autocomplete="name"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="login-field">
+
+                    <label for="email">
+                        Email address
+                    </label>
+
+                    <div class="login-input-wrap">
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="you@example.com"
+                            autocomplete="email"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="login-field">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <div class="login-input-wrap">
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="At least 8 characters"
+                            autocomplete="new-password"
+                            minlength="8"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="login-password-button"
+                            id="togglePassword"
+                        >
+                            Show
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="login-field">
+
+                    <label for="confirmPassword">
+                        Confirm password
+                    </label>
+
+                    <div class="login-input-wrap">
+
+                        <input
+                            type="password"
+                            id="confirmPassword"
+                            name="confirmPassword"
+                            placeholder="Enter your password again"
+                            autocomplete="new-password"
+                            minlength="8"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <p
+                    id="registerMessage"
+                    class="login-message"
+                    aria-live="polite"
+                ></p>
+
+
+                <button
+                    type="submit"
+                    class="login-submit"
+                    id="registerButton"
+                >
+                    <span>Create your account</span>
+                </button>
+
+            </form>
+
+
+            <div class="login-divider">
+                <span>already here?</span>
+            </div>
+
+
+            <p class="login-register">
+                Already have an account?
+                <a href="/login">
+                    Sign in
+                </a>
+            </p>
+
+        </section>
+
+
+        <p class="login-footer">
+            A quiet place to notice what matters.
+        </p>
+
+    </div>
+
+</main>
+
+
+<script>
+
+    const passwordInput =
+        document.getElementById("password");
+
+    const confirmPasswordInput =
+        document.getElementById("confirmPassword");
+
+    const togglePassword =
+        document.getElementById("togglePassword");
+
+    const registerForm =
+        document.getElementById("registerForm");
+
+    const registerMessage =
+        document.getElementById("registerMessage");
+
+    const registerButton =
+        document.getElementById("registerButton");
+
+
+    // Show / hide password
+
+    togglePassword.addEventListener("click", function () {
+
+        const isPassword =
+            passwordInput.type === "password";
+
+        passwordInput.type =
+            isPassword ? "text" : "password";
+
+        confirmPasswordInput.type =
+            isPassword ? "text" : "password";
+
+        togglePassword.textContent =
+            isPassword ? "Hide" : "Show";
+
+    });
+
+
+    // Create account
+
+    registerForm.addEventListener("submit", async function (event) {
+
+        event.preventDefault();
+
+        registerMessage.textContent = "";
+        registerMessage.className = "login-message";
+
+
+        const name =
+            document.getElementById("name").value.trim();
+
+        const email =
+            document.getElementById("email").value.trim();
+
+        const password =
+            passwordInput.value;
+
+        const confirmPassword =
+            confirmPasswordInput.value;
+
+
+        // Check passwords before sending anything
+
+        if (password !== confirmPassword) {
+
+            registerMessage.textContent =
+                "The passwords do not match.";
+
+            registerMessage.classList.add("error");
+
+            return;
+        }
+
+
+        registerButton.disabled = true;
+
+        registerButton.querySelector("span").textContent =
+            "Creating your account...";
+
+
+        try {
+
+            const response = await fetch(
+                "/api/auth/register",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        name,
+                        email,
+                        password
+                    })
+                }
+            );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                registerMessage.textContent =
+                    data.message ||
+                    "The account could not be created.";
+
+                registerMessage.classList.add("error");
+
+                return;
+            }
+
+
+            registerMessage.textContent =
+                "Your account has been created. You can now sign in.";
+
+            registerMessage.classList.add("success");
+
+
+            registerForm.reset();
+
+
+            setTimeout(function () {
+
+                window.location.href = "/login";
+
+            }, 1200);
+
+
+        } catch (error) {
+
+            console.error(
+                "Registration request failed:",
+                error
+            );
+
+            registerMessage.textContent =
+                "We could not connect to the platform. Please try again.";
+
+            registerMessage.classList.add("error");
+
+        } finally {
+
+            registerButton.disabled = false;
+
+            registerButton.querySelector("span").textContent =
+                "Create your account";
+
+        }
+
+    });
+
+</script>
+
+</body>
+</html>

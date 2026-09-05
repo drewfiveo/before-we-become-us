@@ -1,3 +1,4 @@
+javascript
 const express = require("express");
 const path = require("path");
 const session = require("express-session");
@@ -47,9 +48,8 @@ app.use(
             sameSite: "lax",
 
             // Local development uses HTTP.
-            // We will change this when the site is deployed
-            // with HTTPS.
-            secure: false,
+            // Production uses HTTPS.
+            secure: process.env.NODE_ENV === "production",
 
             // Keep the session for 7 days
             maxAge: 1000 * 60 * 60 * 24 * 7
@@ -115,3 +115,4 @@ async function startServer() {
 
 
 startServer();
+

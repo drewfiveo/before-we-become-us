@@ -1,4 +1,3 @@
-
 const express = require("express");
 const path = require("path");
 const session = require("express-session");
@@ -10,6 +9,18 @@ const { connectDatabase } = require("./config/database");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+
+// ============================================================
+// PRODUCTION / RENDER
+// ============================================================
+
+// Render sits behind a proxy.
+// This allows Express to correctly understand HTTPS
+// when handling secure session cookies.
+if (process.env.NODE_ENV === "production") {
+    app.set("trust proxy", 1);
+}
 
 
 // ============================================================
@@ -48,7 +59,7 @@ app.use(
             sameSite: "lax",
 
             // Local development uses HTTP.
-            // Production uses HTTPS.
+            // Production on Render uses HTTPS.
             secure: process.env.NODE_ENV === "production",
 
             // Keep the session for 7 days
@@ -95,13 +106,13 @@ async function startServer() {
         app.locals.db = db;
 
 
-       app.listen(PORT, "0.0.0.0", () => {
+        app.listen(PORT, "0.0.0.0", () => {
 
-    console.log(
-        `Before We Become Us running on port ${PORT}`
-    );
+            console.log(
+                `Before We Become Us running on port ${PORT}`
+            );
 
-});
+        });
 
     } catch (error) {
 
@@ -115,4 +126,3 @@ async function startServer() {
 
 
 startServer();
-

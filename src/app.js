@@ -95,13 +95,13 @@ async function startServer() {
         app.locals.db = db;
 
 
-        app.listen(PORT, () => {
+       app.listen(PORT, "0.0.0.0", () => {
 
-            console.log(
-                `Before We Become Us running at http://localhost:${PORT}`
-            );
+    console.log(
+        `Before We Become Us running on port ${PORT}`
+    );
 
-        });
+});
 
     } catch (error) {
 
